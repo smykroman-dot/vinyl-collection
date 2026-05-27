@@ -1,0 +1,80 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #121212;
+  color: white;
+}
+
+.page-title {
+  font-size: 28px;
+  margin: 0 0 20px 0;
+  color: white;
+  font-weight: 600;
+}
+
+.collection-row {
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  padding: 10px 12px;
+  border-radius: 8px;
+
+  transition: 0.2s;
+
+  font-size: 14px;
+  color: #b3b3b3;
+}
+
+.collection-row:hover {
+  background: #181818;
+}
+
+.collection-cover {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 1px;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.collection-cover:hover {
+  transform: scale(1.05);
+}
+
+.track-title {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+
+  min-width: 220px;
+}
+
+.track-title:hover {
+  color: grey;
+}
+
+.track-artist {
+  color: #b3b3b3;
+  min-width: 180px;
+}
+
+.meta {
+  color: #8a8a8a;
+  min-width: 120px;
+  font-size: 13px;
+}
+
+.empty {
+  color: #8a8a8a;
+  margin-top: 20px;
+}
+
+.collection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

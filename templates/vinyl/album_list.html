@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+
+
+  <link rel="stylesheet" href="{% static 'css/albums.css' %}">
+
+  <h1 class="page-title">Albums {% if year %}({{ year }}){% endif %}</h1>
+
+  <a class="add-link" href="{% url 'vinyl:album-create' %}">
+    + Add album
+  </a>
+
+  <div class="albums-grid">
+
+    {% for album in albums %}
+      <div class="album-card">
+
+        <a href="{% url 'vinyl:album-detail' album.id %}">
+          <img src="{{ album.cover_url }}" width="180" height="180">
+        </a>
+
+        <div class="album-title">
+          <a href="{% url 'vinyl:album-detail' album.id %}">
+            {{ album.title }}
+          </a>
+        </div>
+
+        <div class="artist">
+          <a href="{% url 'vinyl:artist-detail' album.artist.id %}">
+            {{ album.artist }}
+          </a>
+        </div>
+
+      </div>
+    {% empty %}
+      <p>No albums yet</p>
+    {% endfor %}
+
+  </div>
+
+{% endblock %}

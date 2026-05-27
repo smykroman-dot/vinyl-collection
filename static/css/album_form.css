@@ -1,0 +1,20 @@
+.genres-wrapper ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px 14px;
+}
+
+.genres-wrapper li {
+    margin: 0;
+    padding: 0;
+}
+
+.genres-wrapper label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}

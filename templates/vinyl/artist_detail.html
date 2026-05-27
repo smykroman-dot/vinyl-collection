@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/artist.css' %}">
+
+<div class="artist-header">
+  <h1 class="artist-name">{{ artist.name }}</h1>
+</div>
+
+<h2 class="section-title">Albums</h2>
+
+<div class="albums-grid">
+  {% for album in artist.albums.all %}
+    <div class="album-card">
+
+      <a href="{% url 'vinyl:album-detail' album.id %}">
+        <img src="{{ album.cover_url }}" width="180" height="180">
+      </a>
+
+      <div class="album-title">
+        <a href="{% url 'vinyl:album-detail' album.id %}">
+          {{ album.title }}
+        </a>
+      </div>
+
+      <div class="album-year">
+        {{ album.year }}
+      </div>
+
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+  <link rel="stylesheet" href="{% static 'css/album_detail.css' %}">
+
+  <div class="album-detail">
+
+    <img class="album-cover" src="{{ album.cover_url }}" alt="cover">
+
+    <div class="album-info-box">
+
+      <h1 class="album-title">{{ album.title }}</h1>
+
+      <p>
+        <span class="field-label">Artist:</span>
+        <a href="{% url 'vinyl:artist-detail' album.artist.id %}">
+          {{ album.artist }}
+        </a>
+      </p>
+
+      <p>
+        <span class="field-label">Year:</span>
+        <a href="{% url 'vinyl:album-by-year' album.year %}">
+          {{ album.year }}
+        </a>
+      </p>
+
+      <p><span class="field-label">Genres:</span>
+        {% for genre in album.genres.all %}
+          {{ genre.name }}{% if not forloop.last %}, {% endif %}
+        {% empty %}
+          No genres
+        {% endfor %}
+      </p>
+
+      <p><span class="field-label">Created by:</span> {{ album.created_by }}</p>
+
+      <p><span class="field-label">Created at:</span> {{ album.created_at }}</p>
+
+      <div class="album-actions">
+        <a href="{% url 'vinyl:album-update' album.id %}" class="btn btn-primary">EDIT</a>
+        <a href="{% url 'vinyl:album-delete' album.id %}" class="btn btn-danger">DELETE</a>
+        <a href="{% url 'vinyl:album-list' %}" class="btn btn-dark">Back</a>
+      </div>
+
+
+    </div>
+
+  </div>
+
+
+
+
+
+{% if user.is_authenticated %}
+
+  <div style="margin-top: 20px; display: flex; gap: 10px; align-items: center;">
+
+    {% if user_collection %}
+
+
+      <form method="post"
+            action="{% url 'vinyl:collection-delete' user_collection.id %}"
+            style="margin: 0;">
+        {% csrf_token %}
+        <button type="submit"
+                class="btn btn-sm btn-outline-danger">
+          Remove from collection
+        </button>
+      </form>
+
+    {% else %}
+
+      <form method="post"
+            action="{% url 'vinyl:collection-add' album.id %}"
+            style="margin: 0;">
+        {% csrf_token %}
+        <button type="submit"
+                class="btn btn-sm btn-outline-success">
+          Add to collection
+        </button>
+      </form>
+
+    {% endif %}
+
+  </div>
+
+{% endif %}
+
+
+
+
+
+{% endblock %}

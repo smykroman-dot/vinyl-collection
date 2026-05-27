@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Delete artist?</h1>
+
+  <p>Are you sure you want to delete "{{ object.name }}"?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">
+      Yes
+    </button>
+
+    <a href="{% url 'vinyl:album-list' %}" class="btn btn-primary">
+      Cancel
+    </a>
+  </form>
+{% endblock %}
