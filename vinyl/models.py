@@ -93,7 +93,6 @@ class Collection(models.Model):
         ("wishlist", "Wishlist"),
         ("trade", "Trade"),
     )
-
     CONDITION_TYPE = (
         ("SS", "Sealed"),
         ("M", "Mint"),
@@ -102,7 +101,6 @@ class Collection(models.Model):
         ("VG", "Very Good"),
         ("G", "Good"),
     )
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="collection"
     )
@@ -117,6 +115,13 @@ class Collection(models.Model):
 
     class Meta:
         unique_together = ("user", "album")
+
+    def __str__(self):
+        return (
+            f"{self.user.username} - "
+            f"{self.album.title} "
+            f"({self.get_status_display()})"
+        )
 
 
 class User(AbstractUser):

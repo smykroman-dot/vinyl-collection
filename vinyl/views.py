@@ -9,23 +9,18 @@ from vinyl.forms import AlbumForm, CollectionerCreationForm, CollectionForm
 from vinyl.models import Genre, Artist, Album, User, Collection
 
 
-@login_required
-def index(request: HttpRequest) -> HttpResponse:
-    num_users = User.objects.count()
-    num_albums = Album.objects.count()
-    num_artists = Artist.objects.count()
+class IndexView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "vinyl/index.html"
 
-    num_visits = request.session.get("num_visits", 0)
-    request.session["num_visits"] = num_visits + 1
-
-    context = {
-        "num_users": num_users,
-        "num_albums": num_albums,
-        "num_artists": num_artists,
-        "num_visits": num_visits + 1,
-    }
-
-    return render(request, "vinyl/index.html", context=context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        num_visits = self.request.session.get("num_visits", 0)
+        self.request.session["num_visits"] = num_visits + 1
+        context["num_users"] = User.objects.count()
+        context["num_albums"] = Album.objects.count()
+        context["num_artists"] = Artist.objects.count()
+        context["num_visits"] = num_visits + 1
+        return context
 
 
 class GenreListView(LoginRequiredMixin, generic.ListView):
@@ -53,8 +48,6 @@ class GenreDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Genre
     template_name = "vinyl/genre_confirm_delete.html"
     success_url = reverse_lazy("vinyl:genre-list")
-
-
 
 
 class ArtistListView(LoginRequiredMixin, generic.ListView):
@@ -87,8 +80,6 @@ class ArtistDetailView(LoginRequiredMixin, generic.DetailView):
     model = Artist
     template_name = "vinyl/artist_detail.html"
     context_object_name = "artist"
-
-
 
 
 class AlbumListView(LoginRequiredMixin, generic.ListView):
@@ -135,15 +126,12 @@ class AlbumDetailView(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         user_collection = None
-
         if self.request.user.is_authenticated:
             user_collection = Collection.objects.filter(
                 user=self.request.user,
                 album=self.object
             ).first()
-
         context["user_collection"] = user_collection
         return context
 
@@ -167,17 +155,14 @@ class AlbumByYearView(LoginRequiredMixin, generic.ListView):
         return context
 
 
-
-
 class UsersCreateView(generic.CreateView):
     model = User
     form_class = CollectionerCreationForm
     success_url = reverse_lazy("login")
 
 
-
-
 class CollectionAddView(LoginRequiredMixin, generic.View):
+
     def post(self, request, pk):
         album = Album.objects.get(pk=pk)
 
@@ -186,7 +171,6 @@ class CollectionAddView(LoginRequiredMixin, generic.View):
             album=album,
             defaults={"status": "owned"},
         )
-
         return redirect(album.get_absolute_url())
 
 
@@ -207,8 +191,6 @@ class CollectionDeleteView(LoginRequiredMixin, generic.DeleteView):
 
     def get_queryset(self):
         return Collection.objects.filter(user=self.request.user)
-
-
 
 
 class MyCollectionView(LoginRequiredMixin, generic.ListView):

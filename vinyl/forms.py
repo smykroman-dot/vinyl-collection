@@ -1,7 +1,6 @@
 from datetime import date
 
 from django import forms
-from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
 from vinyl.models import Album, Genre, User, Collection

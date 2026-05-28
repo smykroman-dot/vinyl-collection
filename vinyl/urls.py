@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (
-    index,
+    IndexView,
     GenreListView,
     GenreCreateView,
     GenreUpdateView,
@@ -24,7 +24,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path("", index, name="index"),
+    path("", IndexView.as_view(), name="index"),
     path("genres/", GenreListView.as_view(), name="genre-list"),
     path("genres/create/", GenreCreateView.as_view(), name="genre-create"),
     path("genres/<int:pk>/update/", GenreUpdateView.as_view(), name="genre-update"),

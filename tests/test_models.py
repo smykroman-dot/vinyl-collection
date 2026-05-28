@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from vinyl.models import Artist, Genre, Album
+from vinyl.models import Artist, Genre, Album, Collection
 
 
 class ModelsTests(TestCase):
@@ -16,13 +16,33 @@ class ModelsTests(TestCase):
 
     def test_album_str(self):
         artist = Artist.objects.create(name="Pink Floyd", country="UK")
-
         album = Album.objects.create(
             title="Nevermind",
             artist=artist
         )
-
         self.assertEqual(str(album), "Pink Floyd - Nevermind")
+
+    def test_collection_str(self):
+        user = get_user_model().objects.create_user(
+            username="testuser",
+            password="pass123"
+        )
+        artist = Artist.objects.create(
+            name="Nirvana"
+        )
+        album = Album.objects.create(
+            title="Nevermind",
+            artist=artist
+        )
+        collection = Collection.objects.create(
+            user=user,
+            album=album,
+            status="owned"
+        )
+        self.assertEqual(
+            str(collection),
+            "testuser - Nevermind (Owned)"
+        )
 
     def test_create_user(self):
         User = get_user_model()
@@ -33,7 +53,6 @@ class ModelsTests(TestCase):
             last_name="BonJovi",
             country="Ukraine"
         )
-
         self.assertEqual(user.username, "testuser")
         self.assertEqual(user.first_name, "John")
         self.assertEqual(user.last_name, "BonJovi")
