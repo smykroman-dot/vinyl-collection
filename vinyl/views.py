@@ -1,8 +1,6 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect
+from django.urls import reverse_lazy, reverse
 from django.views import generic
 
 from vinyl.forms import AlbumForm, CollectionerCreationForm, CollectionForm
@@ -37,17 +35,23 @@ class GenreCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("vinyl:genre-list")
 
 
-class GenreUpdateView(LoginRequiredMixin, generic.UpdateView):
+class GenreUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Genre
     fields = "__all__"
     template_name = "vinyl/genre_form.html"
     success_url = reverse_lazy("vinyl:genre-list")
 
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
 
-class GenreDeleteView(LoginRequiredMixin, generic.DeleteView):
+
+class GenreDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Genre
     template_name = "vinyl/genre_confirm_delete.html"
     success_url = reverse_lazy("vinyl:genre-list")
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
 
 
 class ArtistListView(LoginRequiredMixin, generic.ListView):
@@ -64,17 +68,24 @@ class ArtistCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("vinyl:artist-list")
 
 
-class ArtistUpdateView(LoginRequiredMixin, generic.UpdateView):
+class ArtistUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Artist
     fields = "__all__"
     template_name = "vinyl/artist_form.html"
     success_url = reverse_lazy("vinyl:artist-list")
 
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
 
-class ArtistDeleteView(LoginRequiredMixin, generic.DeleteView):
+
+class ArtistDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Artist
     template_name = "vinyl/artist_confirm_delete.html"
     success_url = reverse_lazy("vinyl:artist-list")
+
+    def test_func(self):
+        return self.request.user.is_staff or self.request.user.is_superuser
+
 
 class ArtistDetailView(LoginRequiredMixin, generic.DetailView):
     model = Artist
@@ -157,8 +168,9 @@ class AlbumByYearView(LoginRequiredMixin, generic.ListView):
 class UsersCreateView(generic.CreateView):
     model = User
     form_class = CollectionerCreationForm
-    success_url = reverse_lazy("login")
 
+    def get_success_url(self):
+        return reverse("login")
 
 class CollectionAddView(LoginRequiredMixin, generic.View):
 

@@ -19,10 +19,11 @@ class AlbumForm(forms.ModelForm):
 
     def clean_year(self):
         year = self.cleaned_data.get("year")
-
-        if not (1900 <= year <= date.today().year):
-            raise forms.ValidationError("Not valid!")
-
+        current_year = date.today().year
+        if year is not None and not (1900 <= year <= current_year):
+            raise forms.ValidationError(
+                f"Year must be between 1900 and {current_year}."
+            )
         return year
 
 

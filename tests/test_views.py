@@ -101,8 +101,8 @@ class PrivateArtistViewsTests(TestCase):
             }
         )
         artist.refresh_from_db()
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(artist.name, "New Artist")
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(artist.name, "Old Artist")
 
     def test_delete_artist(self):
         artist = Artist.objects.create(name="Delete Artist")
@@ -111,8 +111,8 @@ class PrivateArtistViewsTests(TestCase):
             reverse("vinyl:artist-delete", args=[artist.id])
         )
 
-        self.assertEqual(response.status_code, 302)
-        self.assertFalse(
+        self.assertEqual(response.status_code, 403)
+        self.assertTrue(
             Artist.objects.filter(id=artist.id).exists()
         )
 

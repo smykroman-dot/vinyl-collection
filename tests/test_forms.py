@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.test import TestCase
 
 from vinyl.forms import CollectionerCreationForm, AlbumForm, AlbumSearchForm, CollectionForm
@@ -43,7 +45,10 @@ class FormsTests(TestCase):
         }
         form = AlbumForm(data=form_data)
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors["year"], ["Not valid!"])
+        self.assertEqual(
+            form.errors["year"],
+            [f"Year must be between 1900 and {date.today().year}."]
+        )
 
     def test_collection_form_is_valid(self):
         form_data = {
