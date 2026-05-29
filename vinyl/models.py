@@ -50,41 +50,12 @@ class Album(models.Model):
 
     @property
     def cover_url(self):
-
         if self.cover and hasattr(self.cover, "url"):
             return self.cover.url
-
-        path = os.path.join(settings.MEDIA_ROOT, "albums", f"{self.id}.jpg")
-
-        if os.path.exists(path):
-            return f"{settings.MEDIA_URL}albums/{self.id}.jpg"
-
         return static("img/default-album.jpg")
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-
-        if self.cover:
-            ext = os.path.splitext(self.cover.name)[1]
-
-            new_name = f"{self.pk}{ext}"
-
-            new_path = os.path.join(
-                settings.MEDIA_ROOT,
-                "albums",
-                new_name
-            )
-
-            if self.cover.path != new_path:
-                if os.path.exists(new_path):
-                    os.remove(new_path)
-
-                os.rename(self.cover.path, new_path)
-
-                self.cover.name = f"albums/{new_name}"
-
-                super().save(update_fields=["cover"])
-
 
 
 class Collection(models.Model):
