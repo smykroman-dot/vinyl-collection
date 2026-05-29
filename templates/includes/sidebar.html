@@ -1,0 +1,19 @@
+<aside class="sidebar">
+
+  <h2 class="logo">
+    <a href="{% url 'vinyl:index' %}" style="color: white; text-decoration: none;">
+      🎧 Vinyl Collection
+    </a>
+  </h2>
+
+  <nav>
+
+    <br>
+    <a href="{% url 'vinyl:album-list' %}">Albums</a>
+    <a href="{% url 'vinyl:artist-list' %}">Artists</a>
+    <a href="{% url 'vinyl:genre-list' %}">Genres</a>
+    <br>
+    <a href="{% url 'vinyl:my-collection' %}">My Collection</a>
+  </nav>
+
+</aside>

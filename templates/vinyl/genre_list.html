@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+  <link rel="stylesheet" href="{% static 'css/albums.css' %}">
+
+  <h1 class="page-title">Genres</h1>
+
+  <a class="add-link" href="{% url 'vinyl:genre-create' %}">
+    + Add genre
+  </a>
+
+
+  <table class="table">
+    <tr>
+      <th style="color: grey">ID</th>
+      <th style="color: grey;">NAME</th>
+      <th style="color: grey;">UPDATE</th>
+      <th style="color: grey ;">REMOVE</th>
+    </tr>
+
+    {% for genre in genres %}
+      <tr>
+        <td style="color: white;">{{ genre.id }}</td>
+        <td style="color: white;">{{ genre.name }}</td>
+        <td>
+          <a style="text-decoration: none;"
+             href="{% url 'vinyl:genre-update' pk=genre.id %}">
+            EDIT
+          </a>
+        </td>
+        <td>
+          <a style="color: red; text-decoration: none;"
+             href="{% url 'vinyl:genre-delete' pk=genre.id %}">
+            DELETE
+          </a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4">There are no genres in the service.</td>
+      </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

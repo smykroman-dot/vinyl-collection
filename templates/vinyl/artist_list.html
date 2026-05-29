@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+  <link rel="stylesheet" href="{% static 'css/albums.css' %}">
+
+  <h1 class="page-title">Artists</h1>
+
+  <a class="add-link" href="{% url 'vinyl:artist-create' %}">
+    + Add artist
+  </a>
+
+  <table class="table">
+    <tr>
+      <th style="color: grey">ID</th>
+      <th style="color: grey;">NAME</th>
+      <th style="color: grey;">UPDATE</th>
+      <th style="color: grey ;">REMOVE</th>
+    </tr>
+
+    {% for artist in artists %}
+      <tr>
+        <td style="color: white;">{{ artist.id }}</td>
+        <td>
+          <a href="{% url 'vinyl:artist-detail' pk=artist.id %}" style="color: white; text-decoration: none;">
+            {{ artist.name }}
+          </a>
+        </td>
+        <td>
+          <a style="text-decoration: none;"
+              href="{% url 'vinyl:artist-update' pk=artist.id %}">
+            EDIT
+          </a>
+        </td>
+        <td>
+          <a style="color: red; text-decoration: none;"
+             href="{% url 'vinyl:artist-delete' pk=artist.id %}">
+            DELETE
+          </a>
+        </td>
+      </tr>
+    {% empty %}
+      <tr>
+        <td colspan="4">There are no artists in the service.</td>
+      </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}

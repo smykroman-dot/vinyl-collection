@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>{{ object|yesno:"Update,Create" }} Genre</h1>
+
+  <form method="post">
+    {% csrf_token %}
+
+    {{ form|crispy }}
+
+    <div class="d-flex gap-2 mt-3">
+
+      <button type="submit" class="btn btn-primary">
+        Save
+      </button>
+
+      <a href="{% url 'vinyl:artist-list' %}" class="btn btn-dark">
+        Back
+      </a>
+
+    </div>
+  </form>
+
+{% endblock %}
