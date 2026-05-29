@@ -87,10 +87,9 @@ class AlbumListView(LoginRequiredMixin, generic.ListView):
     template_name = "vinyl/album_list.html"
     context_object_name = "albums"
     paginate_by = 18
-    queryset = Album.objects.select_related("artist")
 
     def get_queryset(self):
-        queryset = Album.objects.select_related("artist")
+        queryset = Album.objects.select_related("artist").order_by("id")
         title = self.request.GET.get("title")
         if title:
             queryset = queryset.filter(title__icontains=title)
